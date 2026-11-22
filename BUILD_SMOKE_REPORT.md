@@ -6,6 +6,8 @@
 **Target:** Windows x64 desktop (primary validation target)  
 **Result:** PASS
 
+**Phase 2 rebuild:** PASS — 2026-11-22, `Flat Iron Fields Windows build: Succeeded, size=95602896 bytes, time=00:00:09.0914420, errors=0, warnings=3`. Rebuilt executable booted for 10 seconds with 0 runtime errors in `Player.log`. Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-build-phase2.log`.
+
 ## Build
 
 Built with `Assets/Scripts/Game/Editor/BuildSmoke.cs` via:
@@ -61,8 +63,8 @@ Launched `Builds/Windows/FlatIronFields.exe` and observed the running process fo
 - [x] Activate Unity Editor license.
 - [x] Import project and resolve package/compile errors.
 - [x] Generate ScriptableObjects and scenes.
-- [x] Run EditMode tests (20/20 passed).
-- [x] Run PlayMode tests (4/4 passed).
+- [x] Run EditMode tests (27/27 passed).
+- [x] Run PlayMode tests (5/5 passed).
 - [x] Build Windows x64 player.
 - [x] Launch build and confirm it boots without runtime errors.
 - [x] Capture console and build log evidence.

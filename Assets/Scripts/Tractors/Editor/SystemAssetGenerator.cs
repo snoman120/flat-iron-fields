@@ -14,17 +14,21 @@ namespace FlatIronFields.Tractors
         {
             EnsureFolder("Assets/ScriptableObjects/Tractors");
             EnsureFolder("Assets/ScriptableObjects/Tractors/Attachments");
+            EnsureFolder("Assets/ScriptableObjects/Tractors/Upgrades");
             EnsureFolder("Assets/ScriptableObjects/Skills");
+            EnsureFolder("Assets/ScriptableObjects/Quests");
             EnsureFolder("Assets/ScriptableObjects/Recipes");
 
             GenerateTractors();
             GenerateAttachments();
+            GenerateUpgrades();
             GenerateSkills();
+            GenerateQuests();
             GenerateRecipes();
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("Flat Iron Fields: generated tractor, attachment, skill, and recipe assets.");
+            Debug.Log("Flat Iron Fields: generated tractor, attachment, upgrade, skill, quest, and recipe assets.");
         }
 
         private static void GenerateTractors()
@@ -68,6 +72,50 @@ namespace FlatIronFields.Tractors
                 attachment.FuelCost = costs[i];
                 Save("Assets/ScriptableObjects/Tractors/Attachments/" + ids[i] + ".asset", attachment);
             }
+        }
+
+        private static void GenerateUpgrades()
+        {
+            MakeUpgrade("speed_1", "Speed Tune I", TractorUpgradeStat.Speed, 20, 120, 1);
+            MakeUpgrade("speed_2", "Speed Tune II", TractorUpgradeStat.Speed, 35, 260, 3);
+            MakeUpgrade("fuel_1", "Fuel Economy I", TractorUpgradeStat.FuelEfficiency, 20, 130, 1);
+            MakeUpgrade("fuel_2", "Fuel Economy II", TractorUpgradeStat.FuelEfficiency, 35, 270, 4);
+            MakeUpgrade("cargo_1", "Cargo Rack I", TractorUpgradeStat.CargoCapacity, 8, 140, 2);
+            MakeUpgrade("cargo_2", "Cargo Rack II", TractorUpgradeStat.CargoCapacity, 16, 280, 5);
+            MakeUpgrade("auto_1", "Auto Steer", TractorUpgradeStat.Automation, 1, 300, 6);
+        }
+
+        private static void MakeUpgrade(string id, string name, TractorUpgradeStat stat, int value, int cost, int unlock)
+        {
+            var upgrade = ScriptableObject.CreateInstance<TractorUpgradeDefinition>();
+            upgrade.Id = id;
+            upgrade.DisplayName = name;
+            upgrade.Stat = stat;
+            upgrade.Value = value;
+            upgrade.Cost = cost;
+            upgrade.UnlockedAtLevel = unlock;
+            Save("Assets/ScriptableObjects/Tractors/Upgrades/" + id + ".asset", upgrade);
+        }
+
+        private static void GenerateQuests()
+        {
+            MakeQuest("first_harvest", "First Harvest", "Harvest 3 crops.", QuestGoal.Harvest, 3, 40, 20);
+            MakeQuest("market_day", "Market Day", "Sell 5 crops.", QuestGoal.Sell, 5, 60, 30);
+            MakeQuest("homestead", "Homestead", "Expand the farm once.", QuestGoal.Expand, 1, 100, 40);
+            MakeQuest("mechanised", "Mechanised", "Use 6 tractor attachment actions.", QuestGoal.Attachments, 6, 120, 50);
+        }
+
+        private static void MakeQuest(string id, string name, string description, QuestGoal goal, int target, int coins, int xp)
+        {
+            var quest = ScriptableObject.CreateInstance<QuestDefinition>();
+            quest.Id = id;
+            quest.DisplayName = name;
+            quest.Description = description;
+            quest.Goal = goal;
+            quest.TargetCount = target;
+            quest.CoinReward = coins;
+            quest.XpReward = xp;
+            Save("Assets/ScriptableObjects/Quests/" + id + ".asset", quest);
         }
 
         private static void GenerateSkills()

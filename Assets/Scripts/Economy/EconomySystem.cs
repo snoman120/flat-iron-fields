@@ -130,7 +130,17 @@ namespace FlatIronFields.Economy
             return true;
         }
 
-        private bool TrySpend(int cost)
+        public bool CanAfford(int cost)
+        {
+            return cost >= 0 && state.Coins >= cost;
+        }
+
+        public void AddReward(int amount)
+        {
+            if (amount > 0) { AddCoins(amount); }
+        }
+
+        public bool TrySpend(int cost)
         {
             if (cost < 0 || state.Coins < cost) { return false; }
             state.Coins -= cost;

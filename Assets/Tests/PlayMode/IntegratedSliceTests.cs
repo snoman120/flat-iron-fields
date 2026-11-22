@@ -135,6 +135,8 @@ namespace FlatIronFields.Tests
                 ui.Initialize(controller.State);
                 ui.RenderHud(controller.State);
                 ui.OpenMenu(MenuId.Seeds);
+                ui.OpenMenu(MenuId.Quests);
+                ui.OpenMenu(MenuId.Upgrades);
                 ui.OpenMenu(MenuId.Help);
                 ui.Message("test message");
                 ui.CloseMenu();
@@ -144,6 +146,46 @@ namespace FlatIronFields.Tests
             {
                 Object.DestroyImmediate(uiObject);
             }
+        }
+
+        [Test]
+        public void Phase2_WeatherUpgradesQuestsAndSaveRoundTrip()
+        {
+            GameController controller = controllerObject.AddComponent<GameController>();
+            GameState state = controller.State;
+            state.Coins = 1000;
+
+            Assert.IsTrue(controller.BuyTractorUpgrade("speed_1"));
+            Assert.Greater(controller.Upgrades.SpeedMultiplier(), 1f);
+
+            state.SelectedCropId = "cabbage";
+            state.Inventory.Seeds["cabbage"] = 2;
+            Plot plot = state.Farm.Plots[0];
+            state.SelectedTool = ToolId.Shovel;
+            controller.UseTool(plot);
+            state.SelectedTool = ToolId.WateringCan;
+            controller.UseTool(plot);
+            state.SelectedTool = ToolId.Rake;
+            controller.UseTool(plot);
+
+            for (int day = 0; day < 4; day++) { controller.NewDay(); }
+            Assert.IsTrue(plot.Ready);
+
+            state.SelectedTool = ToolId.Scythe;
+            controller.UseTool(plot);
+            Assert.Greater(controller.Quests.Progress("first_harvest"), 0);
+
+            state.Coins = 300;
+            Assert.IsTrue(controller.BuyLand());
+            Assert.AreEqual(1, state.Farm.ExpansionStage);
+
+            controller.SaveGame();
+            state.Farm.ExpansionStage = 0;
+            state.Player.TractorUpgrades.Clear();
+            controller.LoadGame();
+
+            Assert.AreEqual(1, controller.State.Farm.ExpansionStage);
+            Assert.IsTrue(controller.Upgrades.Has("speed_1"));
         }
 
         private static int InventoryCount(Dictionary<string, Dictionary<Quality, int>> crops, string cropId)

@@ -15,6 +15,7 @@ namespace FlatIronFields.Tractors
         private readonly EconomySystem economy;
         private readonly ProgressionSystem progression;
         private TractorDefinition definition;
+        private TractorUpgradeSystem upgrades;
         private Vector2 position;
         private float fuelTimer;
 
@@ -25,6 +26,8 @@ namespace FlatIronFields.Tractors
             this.economy = economy;
             this.progression = progression;
         }
+
+        public void SetUpgradeSystem(TractorUpgradeSystem value) { upgrades = value; }
 
         public void Initialize(TractorDefinition value)
         {
@@ -50,11 +53,13 @@ namespace FlatIronFields.Tractors
             if (input == null || definition == null || state.Tractor == null) { return; }
             if (Mathf.Abs(input.Horizontal) + Mathf.Abs(input.Vertical) < 0.001f) { return; }
 
+            float speedBonus = upgrades != null ? upgrades.SpeedMultiplier() : 1f;
             Vector2 direction = new Vector2(input.Horizontal, input.Vertical).normalized;
-            position += direction * definition.Speed * deltaTime;
+            position += direction * definition.Speed * speedBonus * deltaTime;
             state.Tractor.Position = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
 
-            fuelTimer += deltaTime;
+            float efficiency = upgrades != null ? upgrades.FuelEfficiencyMultiplier() : 1f;
+            fuelTimer += deltaTime * efficiency;
             if (fuelTimer >= 1f)
             {
                 fuelTimer -= 1f;
@@ -132,6 +137,7 @@ namespace FlatIronFields.Tractors
         private void AddCargo(string cropId, Quality quality, int quantity)
         {
             int capacity = definition != null ? Mathf.Max(0, definition.CargoCapacity) : 0;
+            if (upgrades != null) { capacity += upgrades.CargoBonus(); }
             for (int i = 0; i < quantity && state.Tractor.CargoCount < capacity; i++)
             {
                 Dictionary<Quality, int> bucket;

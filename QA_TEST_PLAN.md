@@ -1,7 +1,9 @@
 # QA Test Plan — Unity Milestone 1
 
-**Status:** Executed on Windows — EditMode 20/20, PlayMode 4/4, build PASS  
+**Status:** Executed on Windows — EditMode 27/27, PlayMode 5/5, build PASS  
 **Target:** Unity 6000.3.9f1 + 2D URP, Windows primary
+
+Phase 1 baseline: EditMode 20/20, PlayMode 4/4. Phase 2 increment added 7 EditMode and 1 PlayMode test; all pass.
 
 ## Environment Preconditions
 
@@ -32,11 +34,14 @@
 | `Assets/ScriptableObjects/Recipes/*.asset` | 2 | 2 |
 | `Assets/Scenes/Boot.unity`, `MainMenu.unity`, `Farm.unity` | 3 | 3 |
 
-## EditMode Tests — RESULT: 20/20 PASSED
+## EditMode Tests — RESULT: 27/27 PASSED
 
 ```text
-result=Passed total=20 passed=20 failed=0 skipped=0
+result=Passed total=27 passed=27 failed=0 skipped=0
 ```
+
+Results XML (Phase 2): `C:\Users\yuppl\AppData\Local\Temp\opencode\editmode-phase2final.xml`  
+Log (Phase 2): `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-editmode-phase2final.log`
 
 Results XML: `C:\Users\yuppl\AppData\Local\Temp\opencode\editmode-results2.xml`  
 Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-editmode2.log`
@@ -63,6 +68,13 @@ Passing tests:
 - `ProgressionTests.AddXp_GrantsSkillPointOnLevelUp`
 - `ProgressionTests.InvestSkill_ConsumesPointAndAddsSkill`
 - `ProgressionTests.CheckUnlocks_RegistersCropsAndTractors`
+- `Phase2Tests.Weather_DailyWaterDeltaAndWinterDormancy`
+- `Phase2Tests.Weather_RainWatersAndGrowsPlantedPlot`
+- `Phase2Tests.Weather_DryingSunStopsGrowth`
+- `Phase2Tests.TractorUpgrades_PurchaseAppliesStatModifiers`
+- `Phase2Tests.TractorUpgrades_RejectDuplicateAndUnaffordable`
+- `Phase2Tests.Quests_ProgressAndClaimAwardsRewards`
+- `Phase2Tests.Quests_IncompleteCannotBeClaimed`
 
 Coverage confirmed: crop stages/season/water/quality/yield; farm shapes 5/10/20/30/50 and full manual loop; economy pricing, sell, buy seed, buy land, negative-coin prevention, crafting; progression thresholds, skill points, skill investment, unlocks.
 
@@ -74,11 +86,14 @@ First run was 17/20. Three test-setup defects were corrected and the economy lan
 - `Expand_AcceptsValidStagesAndClampsInvalid`: expectation corrected to match `Mathf.Clamp` semantics — `GetShape(-1)` yields 5 plots, `GetShape(99)` yields 50 plots.
 - `ManualLoop_TillWaterPlantGrowHarvest`: test now tops up water after planting so four growth days can elapse.
 
-## PlayMode Tests — RESULT: 4/4 PASSED
+## PlayMode Tests — RESULT: 5/5 PASSED
 
 ```text
-result=Passed total=4 passed=4 failed=0 skipped=0
+result=Passed total=5 passed=5 failed=0 skipped=0
 ```
+
+Results XML (Phase 2): `C:\Users\yuppl\AppData\Local\Temp\opencode\playmode-phase2final.xml`  
+Log (Phase 2): `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-playmode-phase2final.log`
 
 Results XML: `C:\Users\yuppl\AppData\Local\Temp\opencode\playmode-results2.xml`  
 Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-playmode2.log`
@@ -89,6 +104,7 @@ Passing tests:
 - `IntegratedSliceTests.Tractor_MovementAndAllSixAttachments`
 - `IntegratedSliceTests.SaveLoadReset_RoundTripsState`
 - `IntegratedSliceTests.UIManager_OpenCloseMenusWithoutErrors`
+- `IntegratedSliceTests.Phase2_WeatherUpgradesQuestsAndSaveRoundTrip`
 
 Coverage confirmed: manual till → water → plant → grow → harvest → sell; tractor movement and fuel use; all six attachments with cargo → inventory transfer; save/load/reset; UI menu open/close and message rendering.
 

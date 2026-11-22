@@ -17,6 +17,8 @@ namespace FlatIronFields.Input
         OpenLand,
         OpenTractor,
         OpenSkills,
+        OpenQuests,
+        OpenUpgrades,
         ShowHelp,
         Tool1,
         Tool2,
@@ -60,6 +62,8 @@ namespace FlatIronFields.Input
             pressed[ActionId.OpenLand] = keyboard.mKey.wasPressedThisFrame;
             pressed[ActionId.OpenTractor] = keyboard.vKey.wasPressedThisFrame;
             pressed[ActionId.OpenSkills] = keyboard.kKey.wasPressedThisFrame;
+            pressed[ActionId.OpenQuests] = keyboard.jKey.wasPressedThisFrame;
+            pressed[ActionId.OpenUpgrades] = keyboard.rKey.wasPressedThisFrame;
             pressed[ActionId.ShowHelp] = keyboard.hKey.wasPressedThisFrame;
             pressed[ActionId.Tool1] = keyboard.digit1Key.wasPressedThisFrame;
             pressed[ActionId.Tool2] = keyboard.digit2Key.wasPressedThisFrame;

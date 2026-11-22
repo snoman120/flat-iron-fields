@@ -76,6 +76,9 @@ namespace FlatIronFields.Core
         public int TotalExpenses { get; set; }
         public List<string> Skills { get; set; } = new List<string>();
         public List<string> UnlockedIds { get; set; } = new List<string>();
+        public List<string> TractorUpgrades { get; set; } = new List<string>();
+        public Dictionary<string, int> QuestProgress { get; set; } = new Dictionary<string, int>();
+        public List<string> ClaimedQuests { get; set; } = new List<string>();
     }
 
     public sealed class InputState

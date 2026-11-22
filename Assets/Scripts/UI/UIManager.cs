@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using FlatIronFields.Core;
+using FlatIronFields.Progression;
+using FlatIronFields.Tractors;
 using TMPro;
 using UnityEngine;
 
 namespace FlatIronFields.UI
 {
-    public enum MenuId { Seeds, Sell, Land, Tractor, Skills, Help }
+    public enum MenuId { Seeds, Sell, Land, Tractor, Skills, Quests, Upgrades, Help }
 
     public sealed class UIManager : MonoBehaviour
     {
@@ -91,7 +94,7 @@ namespace FlatIronFields.UI
                    + " | Attachment: " + state.Tractor.SelectedAttachmentId;
         }
 
-        private static string MenuContents(MenuId menu)
+        private string MenuContents(MenuId menu)
         {
             switch (menu)
             {
@@ -100,9 +103,41 @@ namespace FlatIronFields.UI
                 case MenuId.Land: return "LAND\nBuy land to expand the farm.";
                 case MenuId.Tractor: return "TRACTOR\nT cycles attachment. WASD drives.";
                 case MenuId.Skills: return "SKILLS\nInvest points at level up.";
-                case MenuId.Help: return "HELP\nWASD drive | Space use tool | 1 Shovel | 2 Water | 3 Rake/Plant | 4 Hoe | 5 Scythe | 6 Cart\nQ/E crop | T attachment | N next day | B/U/M/V/K menus";
+                case MenuId.Quests: return BuildQuestContents();
+                case MenuId.Upgrades: return BuildUpgradeContents();
+                case MenuId.Help: return "HELP\nWASD drive | Space use tool | 1 Shovel | 2 Water | 3 Rake/Plant | 4 Hoe | 5 Scythe | 6 Cart\nQ/E crop | T attachment | N next day | B/U/M/V/K menus | J quests | R upgrades";
                 default: return string.Empty;
             }
+        }
+
+        private string BuildQuestContents()
+        {
+            var lines = new List<string> { "QUESTS" };
+            foreach (QuestDefinition quest in QuestDatabase.All())
+            {
+                if (quest == null) { continue; }
+                int progress = state != null && state.Player != null && state.Player.QuestProgress != null && state.Player.QuestProgress.ContainsKey(quest.Id)
+                    ? state.Player.QuestProgress[quest.Id] : 0;
+                int target = Mathf.Max(1, quest.TargetCount);
+                string status = state != null && state.Player != null && state.Player.ClaimedQuests.Contains(quest.Id)
+                    ? "CLAIMED" : progress >= target ? "READY" : "ACTIVE";
+                lines.Add(quest.DisplayName + " " + Mathf.Min(progress, target) + "/" + target + " [" + status + "]");
+            }
+            if (lines.Count == 1) { lines.Add("No quests available."); }
+            return string.Join("\n", lines);
+        }
+
+        private string BuildUpgradeContents()
+        {
+            var lines = new List<string> { "TRACTOR UPGRADES" };
+            foreach (TractorUpgradeDefinition upgrade in TractorUpgradeDatabase.All())
+            {
+                if (upgrade == null) { continue; }
+                bool owned = state != null && state.Player != null && state.Player.TractorUpgrades.Contains(upgrade.Id);
+                lines.Add(upgrade.DisplayName + " [" + (owned ? "OWNED" : upgrade.Cost + "c") + "]");
+            }
+            if (lines.Count == 1) { lines.Add("No upgrades available."); }
+            return string.Join("\n", lines);
         }
 
         private static void Set(TextMeshProUGUI text, string value)

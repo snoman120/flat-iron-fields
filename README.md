@@ -9,6 +9,7 @@ The HTML5 Canvas files in the repository root are a preserved design reference o
 - Unity version: `6000.3.9f1` (`UNITY_VERSION.txt`, `ProjectSettings/ProjectVersion.txt`)
 - Local agent model: `llama/qwen2.5-7b` (`opencode.jsonc`; no cloud substitution)
 - Current gate: **GO** for Milestone 1 on Windows (Unity acceptance evidence captured 2026-11-22). See `MILESTONE_1_STATUS.md`.
+- Phase 2 systems-depth increment implemented and verified; see `PHASE2_STATUS.md`.
 - Verified: Unity import/compile clean, 26/4/6/6/2 ScriptableObjects, 3 scenes, EditMode 20/20, PlayMode 4/4, Windows x64 build PASS, 0 Console errors.
 
 ## Unity Setup
@@ -45,6 +46,7 @@ Generated assets:
 | T | Cycle attachment |
 | N | Advance day |
 | B / U / M / V / K | Seeds / Sell / Land / Tractor / Skills menus |
+| J / R | Quests / Tractor Upgrades panels |
 | H | Help overlay |
 
 ## Systems
@@ -55,13 +57,16 @@ Generated assets:
 - Economy, recipes, quality-adjusted pricing, and purchase paths: `Assets/Scripts/Economy/`
 - Six levels, six skills, XP, and unlocks: `Assets/Scripts/Progression/`
 - UI, input routing, scene generation, save/load: `Assets/Scripts/UI/`, `Assets/Scripts/Input/`, `Assets/Scripts/Game/`
+- Phase 2 — weather water/dormancy modifiers: `Assets/Scripts/Farming/WeatherSystem.cs`
+- Phase 2 — tractor speed/fuel/cargo/automation upgrades: `Assets/Scripts/Tractors/TractorUpgrade*.cs`
+- Phase 2 — quests and rewards: `Assets/Scripts/Progression/Quest*.cs`
 
 ## Tests
 
 - EditMode: `Assets/Tests/EditMode/`
 - PlayMode: `Assets/Tests/PlayMode/`
 
-Run both from Unity Test Runner. Current results: EditMode **20/20 passed**, PlayMode **4/4 passed**. Evidence, test names, and requirements are in `QA_TEST_PLAN.md`.
+Run both from Unity Test Runner. Current results: EditMode **27/27 passed**, PlayMode **5/5 passed**. Evidence, test names, and requirements are in `QA_TEST_PLAN.md` and `PHASE2_STATUS.md`.
 
 Windows x64 build smoke: PASS. Artifact at `Builds/Windows/FlatIronFields.exe` (gitignored). Rebuild with `Flat Iron Fields > Build Windows` or via `-executeMethod FlatIronFields.Game.Editor.BuildSmoke.BuildWindows`. See `BUILD_SMOKE_REPORT.md`.
 
@@ -73,6 +78,7 @@ Windows x64 build smoke: PASS. Artifact at `Builds/Windows/FlatIronFields.exe` (
 - `MILESTONE_1_STATUS.md` — Director-owned gate and blockers
 - `DIRECTIVE.md` — standing project directive
 - `BUILD_SMOKE_REPORT.md` — build evidence status
+- `PHASE2_STATUS.md` — Phase 2 systems depth status and evidence
 
 ---
 
