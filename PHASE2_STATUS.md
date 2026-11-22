@@ -183,7 +183,7 @@ Polish-pass defects fixed before final verification:
 
 ## Follow-ups
 
-- Quest claim and upgrade purchase buttons in the UI panels.
+- Quest claim and upgrade purchase buttons in the UI panels — tracked in issue #18.
 - Linux/macOS builds — tracked in issue #13.
 - Screenshot evidence and manual GUI walkthrough — tracked in issue #14.
 - Reference prototype visual parity screenshots — tracked in issue #12.
