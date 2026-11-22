@@ -1,7 +1,7 @@
 {
   "name": "FlatIronFields.EditModeTests",
   "rootNamespace": "FlatIronFields.Tests",
-  "references": ["FlatIronFields.Runtime"],
+  "references": ["FlatIronFields.Runtime", "Unity.InputSystem", "Unity.TextMeshPro"],
   "includePlatforms": ["Editor"],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

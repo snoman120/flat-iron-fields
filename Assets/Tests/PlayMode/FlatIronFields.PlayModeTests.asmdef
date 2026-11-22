@@ -1,7 +1,7 @@
 {
   "name": "FlatIronFields.PlayModeTests",
   "rootNamespace": "FlatIronFields.Tests",
-  "references": ["FlatIronFields.Runtime"],
+  "references": ["FlatIronFields.Runtime", "Unity.InputSystem", "Unity.TextMeshPro"],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

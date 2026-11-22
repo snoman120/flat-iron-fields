@@ -1,7 +1,7 @@
 {
   "name": "FlatIronFields.Game.Editor",
   "rootNamespace": "FlatIronFields.Game",
-  "references": ["FlatIronFields.Runtime"],
+  "references": ["FlatIronFields.Runtime", "FlatIronFields.Crops.Editor", "FlatIronFields.Tractors.Editor", "Unity.InputSystem", "Unity.TextMeshPro"],
   "includePlatforms": ["Editor"],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

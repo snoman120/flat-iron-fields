@@ -53,7 +53,7 @@ namespace FlatIronFields.Tests
             controller.UseTool(plot);
             Dictionary<Quality, int> bucket;
             Assert.IsTrue(state.Inventory.Crops.TryGetValue("cabbage", out bucket));
-            Assert.Greater(bucket[Quality.Poor] + bucket[Quality.Normal] + bucket[Quality.Good], 0);
+            Assert.Greater(InventoryCount(state.Inventory.Crops, "cabbage"), 0);
 
             Quality sellQuality = Quality.Poor;
             foreach (KeyValuePair<Quality, int> pair in bucket)

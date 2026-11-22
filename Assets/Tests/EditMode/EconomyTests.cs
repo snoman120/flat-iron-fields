@@ -101,10 +101,11 @@ namespace FlatIronFields.Tests
         [Test]
         public void BuyPlot_AdvancesExpansion()
         {
+            state.Coins = 300;
             Assert.IsTrue(economy.BuyPlot());
             Assert.AreEqual(1, state.Farm.ExpansionStage);
             Assert.AreEqual(10, state.Farm.Plots.Count);
-            Assert.AreEqual(200, state.Coins);
+            Assert.AreEqual(100, state.Coins);
         }
 
         [Test]

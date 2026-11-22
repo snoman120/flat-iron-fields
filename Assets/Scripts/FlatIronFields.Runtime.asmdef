@@ -1,7 +1,7 @@
 {
   "name": "FlatIronFields.Runtime",
   "rootNamespace": "FlatIronFields",
-  "references": [],
+  "references": ["Unity.InputSystem", "Unity.TextMeshPro"],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

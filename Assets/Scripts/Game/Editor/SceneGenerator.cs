@@ -115,7 +115,6 @@ namespace FlatIronFields.Game.Editor
             SceneManager.MoveGameObjectToScene(gridObject, scene);
             var tilemapObject = new GameObject("PlotTilemap", typeof(Tilemap), typeof(TilemapRenderer));
             tilemapObject.transform.SetParent(gridObject.transform, false);
-            SceneManager.MoveGameObjectToScene(tilemapObject, scene);
 
             Tilemap tilemap = tilemapObject.GetComponent<Tilemap>();
             tilemapObject.GetComponent<TilemapRenderer>().sortingOrder = -1;

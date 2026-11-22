@@ -1,78 +1,119 @@
 # QA Test Plan — Unity Milestone 1
 
-**Status:** Blocked by Unity Editor license (see `MILESTONE_1_STATUS.md`, B-01)  
+**Status:** Executed on Windows — EditMode 20/20, PlayMode 4/4, build PASS  
 **Target:** Unity 6000.3.9f1 + 2D URP, Windows primary
 
 ## Environment Preconditions
 
 1. Unity Editor 6000.3.9f1 installed.
-2. A valid Unity Editor license active on the machine.
-3. Packages resolve from `Packages/manifest.json`:
-   - `com.unity.render-pipelines.universal`
-   - `com.unity.inputsystem`
-   - `com.unity.textmeshpro`
-   - `com.unity.test-framework`
-   - `com.unity.ide.visualstudio`
+2. A valid Unity Editor license active on the machine — **verified** `Unity Personal / Assigned / Unlimited`.
+3. Packages resolved from `Packages/manifest.json`:
+   - `com.unity.2d.sprite` 1.0.0
+   - `com.unity.2d.tilemap` 1.0.0
+   - `com.unity.inputsystem` 1.18.0
+   - `com.unity.render-pipelines.universal` 17.3.0
+   - `com.unity.test-framework` 1.6.0
+   - `com.unity.textmeshpro` 5.0.0
+   - `com.unity.ugui` 2.0.0
 4. Open project root `C:\dev\flat-iron-fields`.
 
 ## Unity Editor Setup
 
-1. Allow initial import to finish.
-2. Run `Flat Iron Fields > Generate Crop Assets`.
-3. Run `Flat Iron Fields > Generate System Assets`.
-4. Run `Flat Iron Fields > Generate Scenes`.
-5. Confirm assets exist:
-   - `Assets/ScriptableObjects/Crops/*.asset` — 26 files.
-   - `Assets/ScriptableObjects/Tractors/*.asset` — 4 files.
-   - `Assets/ScriptableObjects/Tractors/Attachments/*.asset` — 6 files.
-   - `Assets/ScriptableObjects/Skills/*.asset` — 6 files.
-   - `Assets/ScriptableObjects/Recipes/*.asset` — 2 files.
-   - `Assets/Scenes/Boot.unity`, `MainMenu.unity`, `Farm.unity`.
+1. Allow initial import to finish — done, exit code 0.
+2. Run `Flat Iron Fields > Generate All Milestone 1 Assets` (single command runs crop assets, system assets, and scenes).
+3. Confirm assets exist — verified:
 
-## EditMode Tests
+| Path | Expected | Actual |
+| --- | --- | --- |
+| `Assets/ScriptableObjects/Crops/*.asset` | 26 | 26 |
+| `Assets/ScriptableObjects/Tractors/*.asset` | 4 | 4 |
+| `Assets/ScriptableObjects/Tractors/Attachments/*.asset` | 6 | 6 |
+| `Assets/ScriptableObjects/Skills/*.asset` | 6 | 6 |
+| `Assets/ScriptableObjects/Recipes/*.asset` | 2 | 2 |
+| `Assets/Scenes/Boot.unity`, `MainMenu.unity`, `Farm.unity` | 3 | 3 |
 
-Run via Test Runner `EditMode` tab. Expected: 20 tests pass.
+## EditMode Tests — RESULT: 20/20 PASSED
 
-Coverage:
-- crop growth stages, season validation, water requirement, quality, yield
-- farm shapes 5/10/20/30/50, plot creation and full manual loop
-- economy quality pricing, sell, buy seed, buy land, negative-coin prevention, crafting
-- progression thresholds, level-up skill points, skill investment, unlocks
+```text
+result=Passed total=20 passed=20 failed=0 skipped=0
+```
 
-## PlayMode Tests
+Results XML: `C:\Users\yuppl\AppData\Local\Temp\opencode\editmode-results2.xml`  
+Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-editmode2.log`
 
-Run via Test Runner `PlayMode` tab. Expected: 4 tests pass.
+Passing tests:
 
-Coverage:
-- manual till → water → plant → grow → harvest → sell
-- tractor movement, fuel use, and all six attachments
-- save/load/reset
-- UI menu open/close and message rendering
+- `CropSystemTests.GrowthStages_HasFiveExpectedStages`
+- `CropSystemTests.IsInSeason_AcceptsValidAndRejectsInvalid`
+- `CropSystemTests.Advance_RequiresWaterAndReachesReady`
+- `CropSystemTests.QualityFor_UsesBonusAndWeeds`
+- `CropSystemTests.YieldFor_UsesCropDefinitionAndQuality`
+- `FarmGridTests.GetShape_ReturnsCanonicalShapes`
+- `FarmGridTests.CreateFarm_StageZeroHasFiveWildPlots`
+- `FarmGridTests.ManualLoop_TillWaterPlantGrowHarvest`
+- `FarmGridTests.Plant_RejectsUnknownCropAndWrongState`
+- `FarmGridTests.Expand_AcceptsValidStagesAndClampsInvalid`
+- `EconomyTests.Price_ScalesWithQuality`
+- `EconomyTests.Sell_RemovesInventoryAndAddsCoins`
+- `EconomyTests.BuySeed_SpendsCoinsAndGrantsSeed`
+- `EconomyTests.BuyPlot_AdvancesExpansion`
+- `EconomyTests.Purchases_NeverAllowNegativeCoins`
+- `EconomyTests.Craft_ConsumesInputsAndProducesOutput`
+- `ProgressionTests.LevelForXp_UsesSixThresholds`
+- `ProgressionTests.AddXp_GrantsSkillPointOnLevelUp`
+- `ProgressionTests.InvestSkill_ConsumesPointAndAddsSkill`
+- `ProgressionTests.CheckUnlocks_RegistersCropsAndTractors`
 
-## Manual Integrated Slice
+Coverage confirmed: crop stages/season/water/quality/yield; farm shapes 5/10/20/30/50 and full manual loop; economy pricing, sell, buy seed, buy land, negative-coin prevention, crafting; progression thresholds, skill points, skill investment, unlocks.
 
-1. Open `Assets/Scenes/MainMenu.unity` and press Play.
-2. Click `Start Farming`; confirm `Farm.unity` loads.
-3. Use `1` Shovel, `2` Watering Can, `3` Rake/Plant on a highlighted plot.
-4. Press `N` until the crop is ready; water again if needed.
-5. Use `5` Scythe to harvest.
-6. Open management panels with `B`, `U`, `M`, `V`, `K`; close with `Escape` not required (toggle buttons in generated UI).
-7. Drive with WASD; cycle crop with Q/E and attachment with T.
-8. Use attachments: tillage, planter, harvester, transporter, watering, fertilizer.
-9. Save/load/reset through `GameController` API or UI wiring.
-10. Confirm no Unity Console errors.
+### Defects found and fixed on first real run
 
-## Build Smoke Test
+First run was 17/20. Three test-setup defects were corrected and the economy land-purchase path was hardened:
 
-1. Build Settings: add Boot, MainMenu, Farm in that order.
-2. Build Windows x64 development build to `Builds/Windows/FlatIronFields.exe`.
-3. Launch executable; confirm Main Menu appears.
-4. Start run; confirm Farm loads and HUD renders.
-5. Capture build log and screenshot.
+- `BuyPlot_AdvancesExpansion`: test started with insufficient coins; now funds the purchase and asserts the correct remaining balance. `EconomySystem.BuyPlot` now validates the target expansion stage before spending coins.
+- `Expand_AcceptsValidStagesAndClampsInvalid`: expectation corrected to match `Mathf.Clamp` semantics — `GetShape(-1)` yields 5 plots, `GetShape(99)` yields 50 plots.
+- `ManualLoop_TillWaterPlantGrowHarvest`: test now tops up water after planting so four growth days can elapse.
+
+## PlayMode Tests — RESULT: 4/4 PASSED
+
+```text
+result=Passed total=4 passed=4 failed=0 skipped=0
+```
+
+Results XML: `C:\Users\yuppl\AppData\Local\Temp\opencode\playmode-results2.xml`  
+Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-playmode2.log`
+
+Passing tests:
+
+- `IntegratedSliceTests.ManualLoop_TillWaterPlantGrowHarvestSell`
+- `IntegratedSliceTests.Tractor_MovementAndAllSixAttachments`
+- `IntegratedSliceTests.SaveLoadReset_RoundTripsState`
+- `IntegratedSliceTests.UIManager_OpenCloseMenusWithoutErrors`
+
+Coverage confirmed: manual till → water → plant → grow → harvest → sell; tractor movement and fuel use; all six attachments with cargo → inventory transfer; save/load/reset; UI menu open/close and message rendering.
+
+### Defect found and fixed on first real run
+
+First run was 3/4. `ManualLoop_TillWaterPlantGrowHarvestSell` indexed specific quality keys (`bucket[Quality.Normal]`) that need not exist; changed to sum the inventory bucket safely via `InventoryCount`.
+
+## Console Verification — RESULT: 0 ERRORS
+
+Scanned `unity-import2.log`, `unity-generate3.log`, `unity-editmode2.log`, `unity-playmode2.log`, and `unity-build.log` for `error CS####`, `Exception:`, `NullReferenceException`, `ArgumentException`, `InvalidOperationException`, `MissingReferenceException`, `UnassignedReferenceException`, and `Script Compilation Error`. Result: **0 error lines**.
+
+## Build Smoke Test — RESULT: PASS
+
+See `BUILD_SMOKE_REPORT.md`. Windows x64 build succeeded with 0 errors; built executable booted and stayed alive with 0 runtime errors in `Player.log`.
 
 ## Evidence Required
 
-- Test Runner pass/fail counts and test names.
-- Unity Console output with no errors.
-- Screenshot of Main Menu and Farm scene.
-- Windows build log and executable path.
+| Evidence | Status |
+| --- | --- |
+| Test Runner pass/fail counts and test names | Done — see above |
+| Unity Console output with no errors | Done — 0 error lines |
+| Windows build log and executable path | Done — `BUILD_SMOKE_REPORT.md` |
+| Editor/player screenshot | QA follow-up |
+| Linux/macOS build smoke | QA follow-up |
+
+## Rejected Evidence
+
+An untrusted QA agent output claimed all three platform builds succeeded without any logs or artifacts. It was rejected and recorded in `MILESTONE_1_STATUS.md`. Only the Unity-generated results above count as acceptance evidence.

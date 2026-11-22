@@ -3,44 +3,73 @@
 **Date:** 2026-11-22  
 **Unity:** 6000.3.9f1  
 **Pipeline:** 2D URP  
-**Target:** Windows x64 desktop  
-**Result:** NOT RUN — blocked
+**Target:** Windows x64 desktop (primary validation target)  
+**Result:** PASS
 
-## Blocker
+## Build
 
-Unity batch mode returned:
-
-```text
-No valid Unity Editor license found. Please activate your license.
-Exiting without the bug reporter. Application will terminate with return code 198
-```
-
-Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-import.log`
-
-Because the Editor could not start, no package import, scene generation, asset generation, Test Runner execution, or player build was possible.
-
-## Offline Compile Evidence
-
-A Roslyn compile check against Unity 6 managed assemblies succeeded:
+Built with `Assets/Scripts/Game/Editor/BuildSmoke.cs` via:
 
 ```text
-Compiling 29 files with 404 references using DotNetSdkRoslyn...
-csc.dll exit code: 0
+Unity.exe -batchmode -quit -projectPath C:\dev\flat-iron-fields \
+  -executeMethod FlatIronFields.Game.Editor.BuildSmoke.BuildWindows \
+  -logFile C:\Users\yuppl\AppData\Local\Temp\opencode\unity-build.log
 ```
 
-This verifies C# syntax and public API shape only. It is **not** Unity acceptance evidence.
+```text
+Flat Iron Fields Windows build: Succeeded, size=95590756 bytes, time=00:00:42.2013571, errors=0, warnings=3
+Unity exit code: 0
+```
 
-## Pending Smoke Checklist
+Scenes included, in bootstrap order:
 
-- [ ] Activate Unity Editor license.
-- [ ] Import project and resolve package errors.
-- [ ] Generate ScriptableObjects and scenes.
-- [ ] Run EditMode tests.
-- [ ] Run PlayMode tests.
-- [ ] Build Windows x64 development build.
-- [ ] Launch build and confirm Boot → MainMenu → Farm.
-- [ ] Capture console and screenshot evidence.
+1. `Assets/Scenes/Boot.unity`
+2. `Assets/Scenes/MainMenu.unity`
+3. `Assets/Scenes/Farm.unity`
+
+### Artifacts
+
+Location: `Builds/Windows/`
+
+| File | Size |
+| --- | --- |
+| `FlatIronFields.exe` | 667,648 bytes |
+| `UnityPlayer.dll` | 35,796,904 bytes |
+| `UnityCrashHandler64.exe` | 1,609,640 bytes |
+| `FlatIronFields_Data/` | managed assemblies, resources, scenes |
+| `MonoBleedingEdge/` | Mono runtime |
+| `D3D12/` | Direct3D 12 shader cache |
+
+Console: 0 errors. 3 non-fatal build warnings; no C# compiler warnings found in the log.
+
+## Startup Smoke
+
+Launched `Builds/Windows/FlatIronFields.exe` and observed the running process for 12 seconds.
+
+- Process remained alive: yes.
+- Assemblies loaded in 1.270 seconds.
+- Graphics: Direct3D 12, AMD Radeon RX 6700 XT, feature level 12.2.
+- Input System initialized.
+- `Player.log` error lines: **0**.
+- Process stopped intentionally after the observation window.
+
+`Player.log` location:
+`C:\Users\yuppl\AppData\LocalLow\DefaultCompany\flat-iron-fields\Player.log`
+
+## Checklist
+
+- [x] Activate Unity Editor license.
+- [x] Import project and resolve package/compile errors.
+- [x] Generate ScriptableObjects and scenes.
+- [x] Run EditMode tests (20/20 passed).
+- [x] Run PlayMode tests (4/4 passed).
+- [x] Build Windows x64 player.
+- [x] Launch build and confirm it boots without runtime errors.
+- [x] Capture console and build log evidence.
+- [ ] Capture screenshot of Main Menu and Farm scene (QA follow-up).
+- [ ] Linux x64 build smoke (QA follow-up).
+- [ ] macOS build smoke (QA follow-up).
 
 ## Final Call
 
-**NO-GO** until the Unity license blocker is resolved and the checklist above passes.
+**PASS** for the Windows x64 desktop smoke test. Linux and macOS builds remain QA follow-ups and do not block the Milestone 1 Windows GO.

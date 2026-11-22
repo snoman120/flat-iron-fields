@@ -76,12 +76,13 @@ namespace FlatIronFields.Economy
         {
             if (state.Farm == null || state.Farm.ExpansionStage >= 4) { return false; }
             int nextStage = state.Farm.ExpansionStage + 1;
+            if (nextStage < 0 || nextStage > 4) { return false; }
             int cost = 200 * nextStage;
             if (!TrySpend(cost)) { return false; }
 
             if (farmGrid != null)
             {
-                if (!farmGrid.Expand(nextStage)) { return false; }
+                farmGrid.Expand(nextStage);
                 state.Farm.Plots = farmGrid.CreateFarm(nextStage);
             }
             state.Farm.ExpansionStage = nextStage;

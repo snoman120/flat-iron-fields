@@ -72,6 +72,7 @@ namespace FlatIronFields.Tests
             Assert.AreEqual(PlotState.Tilled, plot.State);
             Assert.IsTrue(grid.Water(plot));
             Assert.IsTrue(grid.Plant(plot, "cabbage"));
+            Assert.IsTrue(grid.Water(plot));
 
             var cropSystem = new CropSystem();
             Assert.IsTrue(cropSystem.Advance(plot, 4));
@@ -100,7 +101,8 @@ namespace FlatIronFields.Tests
             Assert.AreEqual(4, grid.CurrentStage);
             Assert.IsFalse(grid.Expand(5));
             Assert.IsFalse(grid.Expand(-1));
-            Assert.AreEqual(5, grid.GetShape(99).Plots);
+            Assert.AreEqual(5, grid.GetShape(-1).Plots);
+            Assert.AreEqual(50, grid.GetShape(99).Plots);
         }
     }
 }
