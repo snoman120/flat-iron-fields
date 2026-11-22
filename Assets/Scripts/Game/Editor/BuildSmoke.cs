@@ -8,6 +8,7 @@ namespace FlatIronFields.Game.Editor
 {
     public static class BuildSmoke
     {
+        [MenuItem("Flat Iron Fields/Build Windows")]
         public static void BuildWindows()
         {
             string outputDir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Builds", "Windows"));

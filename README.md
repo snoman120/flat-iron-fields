@@ -8,18 +8,18 @@ The HTML5 Canvas files in the repository root are a preserved design reference o
 
 - Unity version: `6000.3.9f1` (`UNITY_VERSION.txt`, `ProjectSettings/ProjectVersion.txt`)
 - Local agent model: `llama/qwen2.5-7b` (`opencode.jsonc`; no cloud substitution)
-- Current gate: **NO-GO** until Unity license activation and Unity Test Runner evidence are captured. See `MILESTONE_1_STATUS.md`.
+- Current gate: **GO** for Milestone 1 on Windows (Unity acceptance evidence captured 2026-11-22). See `MILESTONE_1_STATUS.md`.
+- Verified: Unity import/compile clean, 26/4/6/6/2 ScriptableObjects, 3 scenes, EditMode 20/20, PlayMode 4/4, Windows x64 build PASS, 0 Console errors.
 
 ## Unity Setup
 
 1. Install Unity 6000.3.9f1 with the 2D URP template support.
 2. Open this folder as a Unity project.
 3. Allow package import to finish. Required packages are declared in `Packages/manifest.json`.
-4. Run these menu commands:
-   - `Flat Iron Fields > Generate Crop Assets`
-   - `Flat Iron Fields > Generate System Assets`
-   - `Flat Iron Fields > Generate Scenes`
-5. Open `Assets/Scenes/MainMenu.unity` and press Play.
+4. Run `Flat Iron Fields > Generate All Milestone 1 Assets` (generates crops, system assets, and the three scenes).
+5. Open `Assets/Scenes/Boot.unity` and press Play; the boot scene loads the Main Menu, which starts the Farm run.
+
+Generated assets are committed, so a fresh checkout is playable without running the generators.
 
 Generated assets:
 - `Assets/ScriptableObjects/Crops/` — 26 crops
@@ -61,7 +61,9 @@ Generated assets:
 - EditMode: `Assets/Tests/EditMode/`
 - PlayMode: `Assets/Tests/PlayMode/`
 
-Run both from Unity Test Runner. Expected counts and evidence requirements are in `QA_TEST_PLAN.md`.
+Run both from Unity Test Runner. Current results: EditMode **20/20 passed**, PlayMode **4/4 passed**. Evidence, test names, and requirements are in `QA_TEST_PLAN.md`.
+
+Windows x64 build smoke: PASS. Artifact at `Builds/Windows/FlatIronFields.exe` (gitignored). Rebuild with `Flat Iron Fields > Build Windows` or via `-executeMethod FlatIronFields.Game.Editor.BuildSmoke.BuildWindows`. See `BUILD_SMOKE_REPORT.md`.
 
 ## Reference Documents
 
