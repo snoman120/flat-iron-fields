@@ -1,0 +1,14 @@
+{
+  "name": "FlatIronFields.Game.Editor",
+  "rootNamespace": "FlatIronFields.Game",
+  "references": ["FlatIronFields.Runtime"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -1,93 +1,77 @@
 # Flat Iron Fields
 
-Flat Iron Fields is a 2D farming simulation with tractor-based farm management. The production target is **Unity 6 LTS + 2D URP** for **Windows, Linux, and macOS desktop**.
+Flat Iron Fields is a 2D farming simulation with tractor-based farm management. The production target is **Unity 6 LTS + 2D URP** with C# and desktop builds for Windows, Linux, and macOS.
 
-## Current State
+The HTML5 Canvas files in the repository root are a preserved design reference only. They are not the production implementation and do not satisfy Milestone 1 acceptance.
 
-The project has been rebaselined from a browser prototype to Unity.
+## Repository State
 
-- The Unity project skeleton and C# implementation are **not yet created**.
-- The existing HTML5 Canvas files are preserved as a **reference design prototype only**.
-- Milestone 1 has been reopened under Unity acceptance criteria in `MILESTONE_1_STATUS.md`.
+- Unity version: `6000.3.9f1` (`UNITY_VERSION.txt`, `ProjectSettings/ProjectVersion.txt`)
+- Local agent model: `llama/qwen2.5-7b` (`opencode.jsonc`; no cloud substitution)
+- Current gate: **NO-GO** until Unity license activation and Unity Test Runner evidence are captured. See `MILESTONE_1_STATUS.md`.
 
-## Documentation
+## Unity Setup
 
-| File | Purpose |
-| --- | --- |
-| `GDD.md` | Game design, systems, technical target, roadmap |
-| `DIRECTIVE.md` | Standing orders for all agents |
-| `ARCHITECTURE.md` | Unity project structure, ownership, APIs, bootstrap order |
-| `MILESTONE_1_TASKS.md` | The eight Unity Milestone 1 tasks and acceptance criteria |
-| `MILESTONE_1_STATUS.md` | Director-owned task board and GO/NO-GO gate |
-| `.opencode/agents/*.md` | Director, Coding, QA, Style, and Authenticity roles |
+1. Install Unity 6000.3.9f1 with the 2D URP template support.
+2. Open this folder as a Unity project.
+3. Allow package import to finish. Required packages are declared in `Packages/manifest.json`.
+4. Run these menu commands:
+   - `Flat Iron Fields > Generate Crop Assets`
+   - `Flat Iron Fields > Generate System Assets`
+   - `Flat Iron Fields > Generate Scenes`
+5. Open `Assets/Scenes/MainMenu.unity` and press Play.
 
-## Planned Unity Project Layout
+Generated assets:
+- `Assets/ScriptableObjects/Crops/` — 26 crops
+- `Assets/ScriptableObjects/Tractors/` — 4 tractors
+- `Assets/ScriptableObjects/Tractors/Attachments/` — 6 attachments
+- `Assets/ScriptableObjects/Skills/` — 6 skills
+- `Assets/ScriptableObjects/Recipes/` — 2 recipes
+- `Assets/Scenes/Boot.unity`, `MainMenu.unity`, `Farm.unity`
 
-```text
-Assets/
-  Art/
-  Audio/
-  Prefabs/
-  Scenes/
-    Boot.unity
-    MainMenu.unity
-    Farm.unity
-  ScriptableObjects/
-    Crops/
-    Tractors/
-    Attachments/
-    Skills/
-    Recipes/
-  Scripts/
-    Core/
-    Crops/
-    Farming/
-    Economy/
-    Progression/
-    Tractors/
-    Input/
-    UI/
-    Game/
-  Tests/
-    EditMode/
-    PlayMode/
-ProjectSettings/
-Packages/
-```
-
-## How to Run (once the Unity project exists)
-
-1. Install Unity 6 LTS with the **2D URP** template.
-2. Open this repository folder as the Unity project root, or copy the generated `Assets/`, `ProjectSettings/`, and `Packages/` into the root.
-3. Open `Assets/Scenes/Boot.unity`.
-4. Press Play in the Editor.
-5. Start a run from the Main Menu to load the Farm scene.
-
-## Planned Controls
+## Controls
 
 | Input | Action |
 | --- | --- |
-| WASD / Arrows | Drive tractor |
-| Space | Interact with plot under tractor |
-| Mouse click | Use selected tool on a plot |
-| 1–6 | Select tool |
-| Q / E | Previous / next crop |
-| T | Cycle tractor attachment |
+| WASD / arrows | Drive tractor |
+| Space | Use selected tool on plot under tractor |
+| 1 | Shovel / till |
+| 2 | Watering can |
+| 3 | Rake / plant selected crop |
+| 4 | Hoe / clear weeds |
+| 5 | Scythe / harvest |
+| 6 | Cart / transfer cargo |
+| Q / E | Cycle crop |
+| T | Cycle attachment |
 | N | Advance day |
-| B / U / M | Seeds / Upgrades / Management menu |
+| B / U / M / V / K | Seeds / Sell / Land / Tractor / Skills menus |
+| H | Help overlay |
 
-## Reference Prototype
+## Systems
 
-The browser slice remains available for design reference:
+- Crop definitions, growth stages, seasonality, quality, and yield: `Assets/Scripts/Crops/`
+- Plot states, expansion shapes, and manual tools: `Assets/Scripts/Farming/`
+- Tractor definitions, Input System movement, fuel, cargo, and six attachments: `Assets/Scripts/Tractors/`
+- Economy, recipes, quality-adjusted pricing, and purchase paths: `Assets/Scripts/Economy/`
+- Six levels, six skills, XP, and unlocks: `Assets/Scripts/Progression/`
+- UI, input routing, scene generation, save/load: `Assets/Scripts/UI/`, `Assets/Scripts/Input/`, `Assets/Scripts/Game/`
 
-- `index.html`
-- `styles.css`
-- `src/*.js`
-- `tests/smoke.html`
-- `tests/smoke.js`
+## Tests
 
-It can be opened in a browser without a build step, but it is **not** the production implementation and its test results do not satisfy the Unity acceptance gate.
+- EditMode: `Assets/Tests/EditMode/`
+- PlayMode: `Assets/Tests/PlayMode/`
 
-## Model / Agent Workflow
+Run both from Unity Test Runner. Expected counts and evidence requirements are in `QA_TEST_PLAN.md`.
 
-All project work is assigned to local agents running on the Jetson-served model `llama/qwen2.5-7b`. No cloud model substitution is permitted by `DIRECTIVE.md`.
+## Reference Documents
+
+- `GDD.md` — design document
+- `ARCHITECTURE.md` — ownership and API contract
+- `MILESTONE_1_TASKS.md` — acceptance criteria
+- `MILESTONE_1_STATUS.md` — Director-owned gate and blockers
+- `DIRECTIVE.md` — standing project directive
+- `BUILD_SMOKE_REPORT.md` — build evidence status
+
+---
+
+**Last Updated:** November 22, 2026
