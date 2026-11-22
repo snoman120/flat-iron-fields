@@ -71,6 +71,7 @@ namespace FlatIronFields.Crops
                     AssetDatabase.CreateAsset(asset, path);
                 }
 
+                asset.name = data.Id;
                 asset.Id = data.Id;
                 asset.DisplayName = data.DisplayName;
                 asset.Seasons = data.Seasons;

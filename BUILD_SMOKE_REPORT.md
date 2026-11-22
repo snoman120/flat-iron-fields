@@ -8,6 +8,8 @@
 
 **Phase 2 rebuild:** PASS — 2026-11-22, `Flat Iron Fields Windows build: Succeeded, size=95602896 bytes, time=00:00:09.0914420, errors=0, warnings=3`. Rebuilt executable booted for 10 seconds with 0 runtime errors in `Player.log`. Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-build-phase2.log`.
 
+**Phase 2 polish rebuild:** PASS — 2026-11-22, `Flat Iron Fields Windows build: Succeeded, size=95615184 bytes, time=00:00:03.3755061, errors=0, warnings=0`. Rebuilt executable booted for 10 seconds with 0 runtime errors in `Player.log`. Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-build-phase2polish-final.log`.
+
 ## Build
 
 Built with `Assets/Scripts/Game/Editor/BuildSmoke.cs` via:
@@ -46,7 +48,7 @@ Console: 0 errors. 3 non-fatal build warnings; no C# compiler warnings found in 
 
 ## Startup Smoke
 
-Launched `Builds/Windows/FlatIronFields.exe` and observed the running process for 12 seconds.
+Launched `Builds/Windows/FlatIronFields.exe` and observed the running process for 12 seconds in the baseline smoke and 10 seconds in each Phase 2 rebuild smoke.
 
 - Process remained alive: yes.
 - Assemblies loaded in 1.270 seconds.
@@ -63,8 +65,8 @@ Launched `Builds/Windows/FlatIronFields.exe` and observed the running process fo
 - [x] Activate Unity Editor license.
 - [x] Import project and resolve package/compile errors.
 - [x] Generate ScriptableObjects and scenes.
-- [x] Run EditMode tests (27/27 passed).
-- [x] Run PlayMode tests (5/5 passed).
+- [x] Run EditMode tests (29/29 passed).
+- [x] Run PlayMode tests (6/6 passed).
 - [x] Build Windows x64 player.
 - [x] Launch build and confirm it boots without runtime errors.
 - [x] Capture console and build log evidence.
@@ -74,4 +76,4 @@ Launched `Builds/Windows/FlatIronFields.exe` and observed the running process fo
 
 ## Final Call
 
-**PASS** for the Windows x64 desktop smoke test. Linux and macOS builds remain QA follow-ups and do not block the Milestone 1 Windows GO.
+**PASS** for the Windows x64 desktop smoke test, including the Phase 2 polish rebuild. Linux and macOS builds remain QA follow-ups and do not block the Milestone 1 Windows GO.

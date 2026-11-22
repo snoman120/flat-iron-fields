@@ -28,6 +28,8 @@ namespace FlatIronFields.Game
         public QuestSystem Quests { get { return quests; } }
         public InputRouter Input;
         public UIManager UI;
+        public AudioService Audio;
+        public SeasonalPaletteSystem Palette;
 
         private CropSystem cropSystem;
         private FarmGrid farmGrid;
@@ -46,16 +48,29 @@ namespace FlatIronFields.Game
         private void Start()
         {
             if (UI != null) { UI.Initialize(State); }
+            if (Audio != null) { Audio.Initialize(State); }
+            if (Palette != null) { Palette.Initialize(State); }
         }
 
         private void Update()
         {
             HandleInput();
+            bool moving = false;
             if (tractor != null && Input != null)
             {
-                tractor.UpdateMovement(Time.deltaTime, Input.Current);
+                InputState input = Input.Current;
+                moving = State != null && State.Tractor != null && State.Tractor.Fuel > 0
+                    && (Mathf.Abs(input.Horizontal) > 0.01f || Mathf.Abs(input.Vertical) > 0.01f);
+                tractor.UpdateMovement(Time.deltaTime, input);
             }
+            if (Audio != null) { Audio.SetTractorMovement(moving, TractorSpeedRatio()); }
             if (UI != null) { UI.RenderHud(State); }
+        }
+
+        private float TractorSpeedRatio()
+        {
+            if (State == null || State.Tractor == null) { return 0f; }
+            return State.Tractor.Fuel / 100f;
         }
 
         public void StartRun()
@@ -73,6 +88,13 @@ namespace FlatIronFields.Game
             if (weatherSystem != null)
             {
                 weatherSystem.ApplyDay(State, farmGrid, cropSystem);
+            }
+            if (Palette != null) { Palette.Apply(State.Season); }
+            if (Audio != null)
+            {
+                Audio.SetWeather(State.Weather);
+                Audio.Play(State.Weather == FlatIronFields.Core.Weather.Rainy ? AudioCue.Rain : AudioCue.Sun);
+                Audio.Play(AudioCue.Day);
             }
             Message("Day " + State.Day + " — " + State.Season + " — " + State.Weather);
         }
@@ -92,12 +114,28 @@ namespace FlatIronFields.Game
                 default: done = false; break;
             }
             if (done && progression != null) { progression.AddXp(2, "tool"); }
+            if (done && Audio != null) { Audio.Play(CueForTool(State.SelectedTool)); }
+        }
+
+        private static AudioCue CueForTool(ToolId tool)
+        {
+            switch (tool)
+            {
+                case ToolId.Shovel: return AudioCue.Till;
+                case ToolId.WateringCan: return AudioCue.Water;
+                case ToolId.Rake: return AudioCue.Plant;
+                case ToolId.Hoe: return AudioCue.Till;
+                case ToolId.Scythe: return AudioCue.Harvest;
+                case ToolId.Cart: return AudioCue.Attachment;
+                default: return AudioCue.Plant;
+            }
         }
 
         public int SellCrop(string cropId, int quantity, Quality quality)
         {
             int earned = economy != null ? economy.Sell(cropId, quantity, quality) : 0;
             if (earned > 0 && quests != null) { quests.Record(QuestGoal.Sell, quantity); }
+            if (earned > 0 && Audio != null) { Audio.Play(AudioCue.Coin); }
             return earned;
         }
 
@@ -105,12 +143,15 @@ namespace FlatIronFields.Game
         {
             bool bought = economy != null && economy.BuyPlot();
             if (bought && quests != null) { quests.Record(QuestGoal.Expand, 1); }
+            if (bought && Audio != null) { Audio.Play(AudioCue.Build); }
             return bought;
         }
 
         public bool BuyTractorUpgrade(string upgradeId)
         {
-            return tractorUpgrades != null && tractorUpgrades.Buy(upgradeId);
+            bool bought = tractorUpgrades != null && tractorUpgrades.Buy(upgradeId);
+            if (bought && Audio != null) { Audio.Play(AudioCue.Upgrade); }
+            return bought;
         }
 
         public bool UseAttachment(Plot plot, string attachmentId)
@@ -118,12 +159,15 @@ namespace FlatIronFields.Game
             if (tractor == null) { return false; }
             bool applied = tractor.ApplyAttachment(plot, attachmentId);
             if (applied && quests != null) { quests.Record(QuestGoal.Attachments, 1); }
+            if (applied && Audio != null) { Audio.Play(AudioCue.Attachment); }
             return applied;
         }
 
         public bool ClaimQuest(string questId)
         {
-            return quests != null && quests.Claim(questId);
+            bool claimed = quests != null && quests.Claim(questId);
+            if (claimed && Audio != null) { Audio.Play(AudioCue.Reward); }
+            return claimed;
         }
 
         public void SaveGame()
@@ -144,6 +188,8 @@ namespace FlatIronFields.Game
             State = FromSaveData(data);
             RewireSystems();
             if (UI != null) { UI.Initialize(State); }
+            if (Audio != null) { Audio.Initialize(State); }
+            if (Palette != null) { Palette.Initialize(State); }
             Message("Game loaded.");
         }
 
@@ -151,6 +197,8 @@ namespace FlatIronFields.Game
         {
             InitializeSystems();
             if (UI != null) { UI.Initialize(State); }
+            if (Audio != null) { Audio.Initialize(State); }
+            if (Palette != null) { Palette.Initialize(State); }
             Message("Game reset.");
         }
 

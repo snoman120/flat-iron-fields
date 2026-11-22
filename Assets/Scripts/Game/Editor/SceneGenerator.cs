@@ -6,8 +6,11 @@ using UnityEditor;
 using UnityEditor.Events;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -41,6 +44,7 @@ namespace FlatIronFields.Game.Editor
             bootstrap.AddComponent<GameController>();
             bootstrap.AddComponent<InputRouter>();
             bootstrap.AddComponent<SceneLoader>();
+            ConfigureAudio(bootstrap.AddComponent<AudioService>());
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/Boot.unity");
         }
 
@@ -48,6 +52,7 @@ namespace FlatIronFields.Game.Editor
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             AddCamera(scene);
+            AddGlobalVolume(scene);
             Canvas canvas = AddCanvas(scene, "MainMenuCanvas");
 
             TextMeshProUGUI title = CreateText(canvas.transform, "Title", "Flat Iron Fields", 48);
@@ -63,14 +68,18 @@ namespace FlatIronFields.Game.Editor
             TextMeshProUGUI label = CreateText(buttonObject.transform, "Label", "Start Farming", 24);
             label.rectTransform.anchoredPosition = Vector2.zero;
 
+            GameObject audio = new GameObject("AudioService");
+            ConfigureAudio(audio.AddComponent<AudioService>());
+
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/MainMenu.unity");
         }
 
         private static void CreateFarmScene()
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            AddCamera(scene);
-            AddFarmTilemap(scene);
+            Camera camera = AddCamera(scene);
+            Tilemap tilemap = AddFarmTilemap(scene);
+            Volume volume = AddGlobalVolume(scene);
             Canvas canvas = AddCanvas(scene, "FarmCanvas");
 
             UIManager ui = new GameObject("UIManager", typeof(RectTransform)).AddComponent<UIManager>();
@@ -97,6 +106,14 @@ namespace FlatIronFields.Game.Editor
             systems.AddComponent<InputRouter>();
             controller.UI = ui;
             controller.Input = systems.GetComponent<InputRouter>();
+            controller.Audio = ConfigureAudio(systems.AddComponent<AudioService>());
+
+            SeasonalPaletteSystem palette = systems.AddComponent<SeasonalPaletteSystem>();
+            palette.TargetCamera = camera;
+            palette.Tilemaps = new[] { tilemap };
+            palette.GlobalVolume = volume;
+            palette.UI = ui;
+            controller.Palette = palette;
 
             HudController hud = systems.AddComponent<HudController>();
             hud.Manager = ui;
@@ -104,7 +121,7 @@ namespace FlatIronFields.Game.Editor
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/Farm.unity");
         }
 
-        private static void AddFarmTilemap(Scene scene)
+        private static Tilemap AddFarmTilemap(Scene scene)
         {
             EnsureFolder("Assets/Art");
             EnsureFolder("Assets/Art/Tiles");
@@ -117,7 +134,8 @@ namespace FlatIronFields.Game.Editor
             tilemapObject.transform.SetParent(gridObject.transform, false);
 
             Tilemap tilemap = tilemapObject.GetComponent<Tilemap>();
-            tilemapObject.GetComponent<TilemapRenderer>().sortingOrder = -1;
+            TilemapRenderer renderer = tilemapObject.GetComponent<TilemapRenderer>();
+            renderer.sortingOrder = -1;
             for (int y = 0; y < 20; y++)
             {
                 for (int x = 0; x < 10; x++)
@@ -126,6 +144,7 @@ namespace FlatIronFields.Game.Editor
                     tilemap.SetTile(new Vector3Int(x, y, 0), plot ? soil : grass);
                 }
             }
+            return tilemap;
         }
 
         private static Tile CreateTile(string name, Color color)
@@ -160,6 +179,36 @@ namespace FlatIronFields.Game.Editor
             return tile;
         }
 
+        private static AudioService ConfigureAudio(AudioService audio)
+        {
+            AudioMixer mixer = AssetDatabase.LoadAssetAtPath<AudioMixer>(PhaseTwoAssetGenerator.MixerPath);
+            audio.Mixer = mixer;
+            UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(PhaseTwoAssetGenerator.MixerPath);
+            if (assets != null)
+            {
+                foreach (UnityEngine.Object asset in assets)
+                {
+                    AudioMixerGroup group = asset as AudioMixerGroup;
+                    if (group == null) { continue; }
+                    if (group.name == "Music") { audio.MusicGroup = group; }
+                    if (group.name == "Sfx") { audio.SfxGroup = group; }
+                }
+            }
+            return audio;
+        }
+
+        private static Volume AddGlobalVolume(Scene scene)
+        {
+            VolumeProfile profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(PhaseTwoAssetGenerator.ProfilePath);
+            GameObject volumeObject = new GameObject("GlobalVolume", typeof(Volume));
+            SceneManager.MoveGameObjectToScene(volumeObject, scene);
+            Volume volume = volumeObject.GetComponent<Volume>();
+            volume.isGlobal = true;
+            volume.priority = 1f;
+            volume.sharedProfile = profile;
+            return volume;
+        }
+
         private static void EnsureFolder(string path)
         {
             if (AssetDatabase.IsValidFolder(path)) { return; }
@@ -170,7 +219,7 @@ namespace FlatIronFields.Game.Editor
             AssetDatabase.CreateFolder(parent, name);
         }
 
-        private static void AddCamera(Scene scene)
+        private static Camera AddCamera(Scene scene)
         {
             GameObject cameraObject = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
             cameraObject.tag = "MainCamera";
@@ -181,6 +230,7 @@ namespace FlatIronFields.Game.Editor
             camera.backgroundColor = new Color(0.42f, 0.55f, 0.28f);
             cameraObject.transform.position = new Vector3(0f, 0f, -10f);
             SceneManager.MoveGameObjectToScene(cameraObject, scene);
+            return camera;
         }
 
         private static Canvas AddCanvas(Scene scene, string name)

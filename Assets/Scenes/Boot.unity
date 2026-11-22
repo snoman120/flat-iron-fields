@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &221281201
+--- !u!1 &222192052
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,9 +127,101 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 221281204}
-  - component: {fileID: 221281203}
-  - component: {fileID: 221281202}
+  - component: {fileID: 222192057}
+  - component: {fileID: 222192056}
+  - component: {fileID: 222192055}
+  - component: {fileID: 222192054}
+  - component: {fileID: 222192053}
+  m_Layer: 0
+  m_Name: GameBootstrap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &222192053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222192052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c477176ab23555b458ecc8cc593cbf72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Game.AudioService
+  Mixer: {fileID: 24100000, guid: 25debd3a8d619894d8f53db2fc5116fc, type: 2}
+  MusicGroup: {fileID: -7467955309662075728, guid: 25debd3a8d619894d8f53db2fc5116fc, type: 2}
+  SfxGroup: {fileID: -2606793338643757659, guid: 25debd3a8d619894d8f53db2fc5116fc, type: 2}
+  MusicVolume: 0.18
+  SfxVolume: 0.42
+--- !u!114 &222192054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222192052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0914198debf4cfa40af0d19c6d1de0f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Game.SceneLoader
+--- !u!114 &222192055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222192052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8788c02d4dc3bf94db92ab9a0eb7064e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Input.InputRouter
+--- !u!114 &222192056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222192052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 662265b4eab83ee46a02108d6a59e305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Game.GameController
+  Input: {fileID: 0}
+  UI: {fileID: 0}
+  Audio: {fileID: 0}
+  Palette: {fileID: 0}
+--- !u!4 &222192057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222192052}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1154464813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1154464816}
+  - component: {fileID: 1154464815}
+  - component: {fileID: 1154464814}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -137,21 +229,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &221281202
+--- !u!81 &1154464814
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221281201}
+  m_GameObject: {fileID: 1154464813}
   m_Enabled: 1
---- !u!20 &221281203
+--- !u!20 &1154464815
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221281201}
+  m_GameObject: {fileID: 1154464813}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
@@ -196,88 +288,16 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &221281204
+--- !u!4 &1154464816
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221281201}
+  m_GameObject: {fileID: 1154464813}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &398450450
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 398450454}
-  - component: {fileID: 398450453}
-  - component: {fileID: 398450452}
-  - component: {fileID: 398450451}
-  m_Layer: 0
-  m_Name: GameBootstrap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &398450451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398450450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0914198debf4cfa40af0d19c6d1de0f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Game.SceneLoader
---- !u!114 &398450452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398450450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8788c02d4dc3bf94db92ab9a0eb7064e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Input.InputRouter
---- !u!114 &398450453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398450450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 662265b4eab83ee46a02108d6a59e305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Game.GameController
-  Input: {fileID: 0}
-  UI: {fileID: 0}
---- !u!4 &398450454
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398450450}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -287,5 +307,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 221281204}
-  - {fileID: 398450454}
+  - {fileID: 1154464816}
+  - {fileID: 222192057}

@@ -4,6 +4,7 @@ using FlatIronFields.Game;
 using FlatIronFields.UI;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace FlatIronFields.Tests
 {
@@ -186,6 +187,48 @@ namespace FlatIronFields.Tests
 
             Assert.AreEqual(1, controller.State.Farm.ExpansionStage);
             Assert.IsTrue(controller.Upgrades.Has("speed_1"));
+        }
+
+        [Test]
+        public void AudioAndPalette_InitializeApplySeasonAndCuePlayback()
+        {
+            var audioObject = new GameObject("TestAudioService");
+            AudioService audio = audioObject.AddComponent<AudioService>();
+            var state = new GameState();
+            audio.Initialize(state);
+            Assert.AreEqual(5, audioObject.transform.childCount);
+
+            foreach (AudioCue cue in System.Enum.GetValues(typeof(AudioCue)))
+            {
+                audio.Play(cue);
+            }
+            audio.SetWeather(FlatIronFields.Core.Weather.Rainy);
+            audio.SetTractorMovement(true, 0.5f);
+            audio.SetMusicVolume(0.1f);
+            audio.SetSfxVolume(0.3f);
+            Assert.AreEqual(0.1f, audio.MusicVolume, 0.001f);
+            Assert.AreEqual(0.3f, audio.SfxVolume, 0.001f);
+
+            var cameraObject = new GameObject("TestPaletteCamera", typeof(Camera));
+            var tilemapObject = new GameObject("TestPaletteTilemap", typeof(Tilemap));
+            var paletteObject = new GameObject("TestPalette", typeof(SeasonalPaletteSystem));
+            SeasonalPaletteSystem palette = paletteObject.GetComponent<SeasonalPaletteSystem>();
+            palette.TargetCamera = cameraObject.GetComponent<Camera>();
+            palette.Tilemaps = new[] { tilemapObject.GetComponent<Tilemap>() };
+            palette.Initialize(state);
+            Color springBackground = palette.TargetCamera.backgroundColor;
+
+            state.Season = Season.Winter;
+            palette.Apply(state.Season);
+
+            Assert.AreEqual(Season.Winter, palette.AppliedSeason);
+            Assert.AreNotEqual(springBackground, palette.TargetCamera.backgroundColor);
+            Assert.AreEqual(SeasonalPalette.For(Season.Winter).TileTint, palette.Tilemaps[0].color);
+
+            Object.DestroyImmediate(tilemapObject);
+            Object.DestroyImmediate(cameraObject);
+            Object.DestroyImmediate(paletteObject);
+            Object.DestroyImmediate(audioObject);
         }
 
         private static int InventoryCount(Dictionary<string, Dictionary<Quality, int>> crops, string cropId)

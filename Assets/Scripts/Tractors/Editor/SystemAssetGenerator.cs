@@ -156,6 +156,10 @@ namespace FlatIronFields.Tractors
 
         private static void Save<T>(string path, T asset) where T : ScriptableObject
         {
+            string fileName = path.Substring(path.LastIndexOf('/') + 1);
+            string assetName = fileName.Substring(0, fileName.LastIndexOf('.'));
+            asset.name = assetName;
+
             T existing = AssetDatabase.LoadAssetAtPath<T>(path);
             if (existing == null)
             {
@@ -164,6 +168,7 @@ namespace FlatIronFields.Tractors
             else
             {
                 EditorUtility.CopySerialized(asset, existing);
+                existing.name = assetName;
                 Object.DestroyImmediate(asset);
                 EditorUtility.SetDirty(existing);
             }

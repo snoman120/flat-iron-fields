@@ -12,6 +12,7 @@ namespace FlatIronFields.Game.Editor
         {
             CropAssetGenerator.GenerateAll();
             SystemAssetGenerator.GenerateAll();
+            PhaseTwoAssetGenerator.GenerateAll();
             SceneGenerator.GenerateAll();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

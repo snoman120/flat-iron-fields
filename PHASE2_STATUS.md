@@ -1,4 +1,4 @@
-# Phase 2 Status — Tractor and Systems Depth
+# Phase 2 Status — Systems Depth and Polish
 
 **Date:** 2026-11-22  
 **Directive:** `DIRECTIVE.md`  
@@ -9,7 +9,7 @@
 
 ## Scope Delivered
 
-This increment covers the systems-depth portion of Phase 2. Audio pass, visual seasonal palette, and full quest/crafting content expansion remain follow-ups.
+This increment covers Phase 2 systems depth plus the procedural audio and seasonal visual palette passes. Cross-platform build QA, screenshot evidence, and quest-claim UI buttons remain follow-ups.
 
 | Feature | Status | Implementation |
 | --- | --- | --- |
@@ -18,6 +18,8 @@ This increment covers the systems-depth portion of Phase 2. Audio pass, visual s
 | Quests and rewards | Done | `Assets/Scripts/Progression/QuestDefinition.cs`, `QuestDatabase.cs`, `QuestSystem.cs` |
 | Quest/upgrades UI | Done | `Assets/Scripts/UI/UIManager.cs`, `Assets/Scripts/Input/InputRouter.cs`, `GameController.HandleInput` |
 | Save/load hardening | Done | `Assets/Scripts/Game/GameController.cs` |
+| Procedural audio | Done | `Assets/Scripts/Game/AudioService.cs`, `AudioCue.cs`, `Assets/Audio/FarmAudio.mixer` |
+| Seasonal palette | Done | `Assets/Scripts/Game/SeasonalPalette.cs`, `SeasonalPaletteSystem.cs`, `Assets/Audio/SeasonalVolumeProfile.asset` |
 
 ## Feature Details
 
@@ -62,21 +64,41 @@ Previously lost state is now persisted and restored:
 - `PlayerState.QuestProgress` and `PlayerState.ClaimedQuests`
 - `TractorState.Cargo` and `CargoCount`
 
+### Procedural audio
+
+- All clips are generated in memory at runtime; the build ships no external audio assets.
+- Loops: farm music, ambient wind/birds, tractor engine, and rain.
+- Engine volume/pitch track tractor movement; rain loop activates only in rainy weather.
+- Twelve SFX cues cover till, plant, water, harvest, coin, build, upgrade, reward, day, attachment, rain, and sun.
+- Audio routes through the generated `FarmAudio.mixer` Music/Sfx groups, with exposed `MusicVolume` and `SfxVolume` parameters.
+- `GameController` fires cues for tools, day advance, weather, sales, land purchase, upgrades, attachments, and quest claims.
+
+### Seasonal palette
+
+- Four distinct schemes for Spring, Summer, Autumn, and Winter.
+- Applies camera background color, Tilemap tint, HUD season text tint, and URP `ColorAdjustments` (post exposure, contrast, saturation, color filter).
+- A global `Volume` with `SeasonalVolumeProfile.asset` is wired into the Farm and MainMenu scenes.
+- Palette changes are driven by explicit start/day/load/reset transitions, not frame rate.
+
 ## Generated Asset Counts
 
 | Path | Count |
 | --- | --- |
 | `Assets/ScriptableObjects/Tractors/Upgrades/*.asset` | 7 |
 | `Assets/ScriptableObjects/Quests/*.asset` | 4 |
+| `Assets/Audio/FarmAudio.mixer` | 1 |
+| `Assets/Audio/SeasonalVolumeProfile.asset` | 1 |
 
-Generator: `Assets/Scripts/Tractors/Editor/SystemAssetGenerator.cs` via `Flat Iron Fields > Generate All Milestone 1 Assets`.
+Audio clips themselves are generated at runtime by `AudioService`; no clip files are required.
+
+Generators: `Assets/Scripts/Crops/Editor/CropAssetGenerator.cs`, `Assets/Scripts/Tractors/Editor/SystemAssetGenerator.cs`, `Assets/Scripts/Game/Editor/PhaseTwoAssetGenerator.cs`, and `Assets/Scripts/Game/Editor/SceneGenerator.cs`, all invoked by `Flat Iron Fields > Generate All Milestone 1 Assets`.
 
 ## Verification Evidence
 
 ### Offline compile
 
 ```text
-Compiling 39 files with 404 references using DotNetSdkRoslyn...
+Compiling 44 files with 404 references using DotNetSdkRoslyn...
 csc.dll exit code: 0
 ```
 
@@ -87,20 +109,31 @@ Unity exit code: 0
 Error lines: 0
 ```
 
-Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-phase2-generate.log`
+Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-phase2-polish-generate-final2.log`
+
+Generated output:
+
+```text
+Flat Iron Fields: generated 26 crop assets.
+Flat Iron Fields: generated tractor, attachment, upgrade, skill, quest, and recipe assets.
+Flat Iron Fields: generated audio mixer and seasonal volume profile.
+Flat Iron Fields: generated Boot, MainMenu, and Farm scenes.
+```
+
+Generators: `CropAssetGenerator`, `SystemAssetGenerator`, `PhaseTwoAssetGenerator`, and `SceneGenerator`, all invoked by `Flat Iron Fields > Generate All Milestone 1 Assets`.
 
 ### Tests
 
 EditMode:
 
 ```text
-result=Passed total=27 passed=27 failed=0 skipped=0
+result=Passed total=29 passed=29 failed=0 skipped=0
 ```
 
 PlayMode:
 
 ```text
-result=Passed total=5 passed=5 failed=0 skipped=0
+result=Passed total=6 passed=6 failed=0 skipped=0
 ```
 
 New tests:
@@ -112,18 +145,21 @@ New tests:
 - `Phase2Tests.TractorUpgrades_RejectDuplicateAndUnaffordable`
 - `Phase2Tests.Quests_ProgressAndClaimAwardsRewards`
 - `Phase2Tests.Quests_IncompleteCannotBeClaimed`
+- `Phase2PolishTests.SeasonalPalette_AllSeasonsHaveDistinctReadableSchemes`
+- `Phase2PolishTests.SeasonalPalette_UnknownSeasonFallsBackToSpring`
 - `IntegratedSliceTests.Phase2_WeatherUpgradesQuestsAndSaveRoundTrip`
+- `IntegratedSliceTests.AudioAndPalette_InitializeApplySeasonAndCuePlayback`
 
-Results XML: `editmode-phase2final.xml`, `playmode-phase2final.xml` in `C:\Users\yuppl\AppData\Local\Temp\opencode`.
+Results XML: `editmode-phase2polish-final.xml`, `playmode-phase2polish-final.xml` in `C:\Users\yuppl\AppData\Local\Temp\opencode`.
 
 ### Console
 
-`unity-phase2-generate.log`, `unity-editmode-phase2final.log`, `unity-playmode-phase2final.log`, and `unity-build-phase2.log` contain 0 error patterns (`error CS####`, `NullReferenceException`, `ArgumentException`, `InvalidOperationException`, `MissingReferenceException`, `UnassignedReferenceException`, `Script Compilation Error`).
+`unity-phase2-polish-generate-final2.log`, `unity-editmode-phase2polish-final.log`, `unity-playmode-phase2polish-final.log`, and `unity-build-phase2polish-final.log` contain 0 error patterns (`error CS####`, `NullReferenceException`, `ArgumentException`, `InvalidOperationException`, `MissingReferenceException`, `UnassignedReferenceException`, `Script Compilation Error`, `[Error]`).
 
 ### Build and startup smoke
 
 ```text
-Flat Iron Fields Windows build: Succeeded, size=95602896 bytes, time=00:00:09.0914420, errors=0, warnings=3
+Flat Iron Fields Windows build: Succeeded, size=95615184 bytes, time=00:00:03.3755061, errors=0, warnings=0
 ```
 
 Rebuilt executable stayed alive for 10 seconds; `Player.log` contained 0 error lines.
@@ -137,14 +173,21 @@ First Phase 2 run was 25/27 EditMode. Both were test expectation errors, not gam
 
 Compile integration errors were also fixed: missing `using` directives for `CropSystem`, `EconomySystem`, and `ProgressionSystem`.
 
+Polish-pass defects fixed before final verification:
+
+- `com.unity.modules.audio` was missing from `Packages/manifest.json`; runtime audio types did not resolve in Unity even though offline compile succeeded.
+- `Object` was ambiguous between `UnityEngine.Object` and `System.Object` in PlayMode tests and the mixer generator; references are now fully qualified.
+- `AudioMixerController` is not a `ScriptableObject`; the generator now casts the reflected instance to `UnityEngine.Object` and resolves Music/Sfx groups via `AssetDatabase.LoadAllAssetsAtPath`.
+- `AudioClip.Create(..., stream: true)` cannot be followed by `SetData`; loops now use non-streamed clips.
+- Regenerated ScriptableObjects were losing `m_Name`; crop and system generators now set `asset.name` from the asset id.
+
 ## Follow-ups
 
-- Audio pass: AudioMixer, seasonal music, engine loop, SFX (`GDD §6.2`) — issue #16.
-- Seasonal palette pass using 2D URP color grading and tinted Tilemaps — issue #17.
-- Quest content expansion and quest-claim UI buttons.
+- Quest claim and upgrade purchase buttons in the UI panels.
 - Linux/macOS builds — tracked in issue #13.
 - Screenshot evidence and manual GUI walkthrough — tracked in issue #14.
+- Reference prototype visual parity screenshots — tracked in issue #12.
 
 ## Final Call
 
-**Verified on Windows.** Phase 2 systems-depth increment passes Unity import, generation, 27/27 EditMode, 5/5 PlayMode, 0 Console errors, Windows build, and startup smoke.
+**Verified on Windows.** Phase 2 systems depth and polish pass Unity import, generation, 29/29 EditMode, 6/6 PlayMode, 0 Console errors, Windows build, and startup smoke. Audio (#16) and seasonal palette (#17) are complete.

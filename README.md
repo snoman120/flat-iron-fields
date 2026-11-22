@@ -9,8 +9,8 @@ The HTML5 Canvas files in the repository root are a preserved design reference o
 - Unity version: `6000.3.9f1` (`UNITY_VERSION.txt`, `ProjectSettings/ProjectVersion.txt`)
 - Local agent model: `llama/qwen2.5-7b` (`opencode.jsonc`; no cloud substitution)
 - Current gate: **GO** for Milestone 1 on Windows (Unity acceptance evidence captured 2026-11-22). See `MILESTONE_1_STATUS.md`.
-- Phase 2 systems-depth increment implemented and verified; see `PHASE2_STATUS.md`.
-- Verified: Unity import/compile clean, 26/4/6/6/2 ScriptableObjects, 3 scenes, EditMode 20/20, PlayMode 4/4, Windows x64 build PASS, 0 Console errors.
+- Phase 2 systems-depth and polish increment implemented and verified; see `PHASE2_STATUS.md`.
+- Verified: Unity import/compile clean, 26 crops, 4 tractors, 6 attachments, 6 skills, 2 recipes, 7 upgrades, 4 quests, audio mixer, seasonal volume profile, 3 scenes, EditMode 29/29, PlayMode 6/6, Windows x64 build PASS, 0 Console errors.
 
 ## Unity Setup
 
@@ -28,6 +28,9 @@ Generated assets:
 - `Assets/ScriptableObjects/Tractors/Attachments/` — 6 attachments
 - `Assets/ScriptableObjects/Skills/` — 6 skills
 - `Assets/ScriptableObjects/Recipes/` — 2 recipes
+- `Assets/ScriptableObjects/Tractors/Upgrades/` — 7 upgrades
+- `Assets/ScriptableObjects/Quests/` — 4 quests
+- `Assets/Audio/FarmAudio.mixer`, `SeasonalVolumeProfile.asset`
 - `Assets/Scenes/Boot.unity`, `MainMenu.unity`, `Farm.unity`
 
 ## Controls
@@ -60,13 +63,15 @@ Generated assets:
 - Phase 2 — weather water/dormancy modifiers: `Assets/Scripts/Farming/WeatherSystem.cs`
 - Phase 2 — tractor speed/fuel/cargo/automation upgrades: `Assets/Scripts/Tractors/TractorUpgrade*.cs`
 - Phase 2 — quests and rewards: `Assets/Scripts/Progression/Quest*.cs`
+- Phase 2 — procedural music, ambience, engine, rain, and SFX: `Assets/Scripts/Game/AudioService.cs`
+- Phase 2 — seasonal camera, Tilemap, HUD, and URP palette: `Assets/Scripts/Game/SeasonalPalette*.cs`
 
 ## Tests
 
 - EditMode: `Assets/Tests/EditMode/`
 - PlayMode: `Assets/Tests/PlayMode/`
 
-Run both from Unity Test Runner. Current results: EditMode **27/27 passed**, PlayMode **5/5 passed**. Evidence, test names, and requirements are in `QA_TEST_PLAN.md` and `PHASE2_STATUS.md`.
+Run both from Unity Test Runner. Current results: EditMode **29/29 passed**, PlayMode **6/6 passed**. Evidence, test names, and requirements are in `QA_TEST_PLAN.md` and `PHASE2_STATUS.md`.
 
 Windows x64 build smoke: PASS. Artifact at `Builds/Windows/FlatIronFields.exe` (gitignored). Rebuild with `Flat Iron Fields > Build Windows` or via `-executeMethod FlatIronFields.Game.Editor.BuildSmoke.BuildWindows`. See `BUILD_SMOKE_REPORT.md`.
 
@@ -78,7 +83,7 @@ Windows x64 build smoke: PASS. Artifact at `Builds/Windows/FlatIronFields.exe` (
 - `MILESTONE_1_STATUS.md` — Director-owned gate and blockers
 - `DIRECTIVE.md` — standing project directive
 - `BUILD_SMOKE_REPORT.md` — build evidence status
-- `PHASE2_STATUS.md` — Phase 2 systems depth status and evidence
+- `PHASE2_STATUS.md` — Phase 2 systems depth and polish status/evidence
 
 ---
 

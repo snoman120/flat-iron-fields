@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5de6d7f33083c8448e7dcb9afc1ea81, type: 3}
-  m_Name: 
+  m_Name: basic
   m_EditorClassIdentifier: FlatIronFields.Runtime::FlatIronFields.Tractors.TractorDefinition
   Id: basic
   DisplayName: Basic Tractor
