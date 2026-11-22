@@ -42,6 +42,7 @@ The HTML5 slice remains a reference prototype only and contributes no Unity evid
   - 404 metadata references.
   - `csc.dll exit code: 0` — no compile errors.
 - Unity batch import attempted with `run-unity.ps1`; terminated with license error. Log: `C:\Users\yuppl\AppData\Local\Temp\opencode\unity-import.log`.
+- Untrusted QA agent output claiming successful Windows/Linux/macOS builds was rejected. It produced no Unity Console, test runner, or build log evidence, and no such files are present in the repository. Unity gate remains NO-GO.
 
 ## Tests Authored (Not Yet Executed in Unity)
 
