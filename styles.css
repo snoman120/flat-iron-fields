@@ -1,0 +1,128 @@
+:root {
+  --soil: #2a2118;
+  --soil-dark: #17130f;
+  --wood: #6b4a2f;
+  --grain: #d8bf8a;
+  --leaf: #7ea64a;
+  --sky: #4d7d96;
+  --ink: #f3e5c0;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--soil-dark);
+  color: var(--ink);
+  font-family: "Courier New", Courier, monospace;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 20% 10%, #3b3024 0, transparent 45%),
+    radial-gradient(circle at 85% 90%, #24301f 0, transparent 40%),
+    var(--soil-dark);
+}
+
+.shell {
+  width: 1280px;
+  max-width: 100%;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  border: 3px solid var(--wood);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1b1712;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), inset 0 0 0 1px #9a7a4d;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  background: #1b1712;
+}
+
+.caption {
+  margin: 10px 2px 0;
+  color: #bfa77c;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+#help-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--grain);
+  border-radius: 50%;
+  background: var(--soil);
+  color: var(--ink);
+  font: bold 16px/1 "Courier New", monospace;
+  cursor: pointer;
+  z-index: 4;
+}
+
+#help-toggle:hover { background: var(--wood); }
+
+#help-overlay {
+  position: absolute;
+  top: 106px;
+  right: 16px;
+  width: 250px;
+  padding: 10px 12px 12px;
+  border: 2px solid #c7a86e;
+  border-radius: 4px;
+  background: rgba(28, 22, 16, 0.94);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  color: var(--ink);
+  font-size: 11px;
+  line-height: 1.45;
+  z-index: 3;
+}
+
+.help-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--grain);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+#help-close {
+  border: 0;
+  background: transparent;
+  color: var(--grain);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#help-overlay ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+#help-overlay li { margin-bottom: 3px; }
+
+noscript {
+  display: block;
+  max-width: 1280px;
+  margin: 12px auto;
+  color: #ffd28a;
+  text-align: center;
+}

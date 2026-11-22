@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flat Iron Fields - Milestone 1 Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <div class="stage">
+      <canvas id="game" width="1280" height="720" aria-label="Flat Iron Fields game canvas">
+        Your browser needs HTML5 Canvas to play Flat Iron Fields.
+      </canvas>
+
+      <button id="help-toggle" type="button" title="Toggle controls">?</button>
+      <aside id="help-overlay" aria-label="Controls">
+        <div class="help-head">
+          <strong>Controls</strong>
+          <button id="help-close" type="button" aria-label="Close controls">&times;</button>
+        </div>
+        <ul>
+          <li>WASD / Arrows: drive tractor</li>
+          <li>Space: interact with plot under tractor</li>
+          <li>Click plot: use selected tool</li>
+          <li>1-6: tools &nbsp; Q/E: crop</li>
+          <li>T: attachment &nbsp; N: next day</li>
+          <li>B: seeds &nbsp; U: upgrades</li>
+          <li>M: menu &nbsp; S/L: save/load &nbsp; R: reset</li>
+        </ul>
+      </aside>
+    </div>
+    <p class="caption">Flat Iron Fields &middot; Milestone 1 vertical slice &middot; No install, no server, no dependencies.</p>
+  </main>
+
+  <noscript>Flat Iron Fields needs JavaScript enabled.</noscript>
+
+  <script src="src/config.js"></script>
+  <script src="src/state.js"></script>
+  <script src="src/crops.js"></script>
+  <script src="src/plots.js"></script>
+  <script src="src/economy.js"></script>
+  <script src="src/progression.js"></script>
+  <script src="src/tractors.js"></script>
+  <script src="src/input.js"></script>
+  <script src="src/ui.js"></script>
+  <script src="src/game.js"></script>
+</body>
+</html>
