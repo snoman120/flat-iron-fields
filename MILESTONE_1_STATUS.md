@@ -30,7 +30,7 @@ Windows is the primary validation target and has passed. Linux/macOS builds are 
 | B-01 | Unity Editor license not activated (`No valid Unity Editor license found`, exit code 198) | Project Owner / Director Agent | Blocked Unity import until user activated Unity Personal in Hub | Resolved 2026-11-22 |
 | B-02 | ScriptableObject `.asset` files required for asset-count acceptance | Core Systems / Systems | Asset generation had to run inside Unity | Resolved 2026-11-22; generator executed, counts verified |
 | B-03 | Three EditMode test-setup defects and one PlayMode test-setup defect surfaced on first real Unity run | Coding Agent / QA | Initial run 17/20 EditMode, 3/4 PlayMode | Resolved 2026-11-22; test expectations corrected and `BuyPlot` hardened; re-run 20/20 and 4/4 |
-| B-04 | Linux/macOS desktop build smoke tests not yet executed | QA | Cross-platform certification incomplete | Open — follow-up, does not block Windows GO |
+| B-04 | Linux/macOS desktop build smoke tests not yet executed | QA | Cross-platform certification incomplete | Open — tracked in issue #13; does not block Windows GO |
 
 ## Task Board
 
@@ -124,9 +124,9 @@ Covered by PlayMode `ManualLoop_TillWaterPlantGrowHarvestSell` (till → water �
 
 ## Follow-up (does not block GO)
 
-- Linux x64 and macOS desktop build smoke tests — QA (B-04).
-- Editor/player screenshots for the QA evidence packet — QA.
-- Manual GUI walkthrough of every management panel — QA.
+- Linux x64 and macOS desktop build smoke tests — QA (B-04, issue #13).
+- Editor/player screenshots for the QA evidence packet — QA (issue #14).
+- Manual GUI walkthrough of every management panel — QA (issue #14).
 
 ## Final Call
 
