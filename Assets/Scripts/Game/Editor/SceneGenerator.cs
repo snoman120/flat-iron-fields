@@ -1,3 +1,4 @@
+using System.IO;
 using FlatIronFields.Game;
 using FlatIronFields.Input;
 using FlatIronFields.UI;
@@ -19,6 +20,9 @@ namespace FlatIronFields.Game.Editor
 {
     public static class SceneGenerator
     {
+        private const string TmpFontPath = "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
+        private static TMP_FontAsset uiFont;
+
         [MenuItem("Flat Iron Fields/Generate Scenes")]
         public static void GenerateAll()
         {
@@ -27,6 +31,8 @@ namespace FlatIronFields.Game.Editor
                 AssetDatabase.CreateFolder("Assets", "Scenes");
             }
 
+            uiFont = EnsureTmpFont();
+
             CreateBootScene();
             CreateMainMenuScene();
             CreateFarmScene();
@@ -34,6 +40,46 @@ namespace FlatIronFields.Game.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("Flat Iron Fields: generated Boot, MainMenu, and Farm scenes.");
+        }
+
+        private static TMP_FontAsset EnsureTmpFont()
+        {
+            TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TmpFontPath);
+            if (font != null)
+            {
+                return font;
+            }
+
+            string editorFolder = Path.GetDirectoryName(EditorApplication.applicationPath);
+            if (string.IsNullOrEmpty(editorFolder))
+            {
+                Debug.LogWarning("Flat Iron Fields: could not locate the Unity editor folder for TMP Essential Resources.");
+                return null;
+            }
+
+            string package = Path.Combine(
+                editorFolder,
+                "Data",
+                "Resources",
+                "PackageManager",
+                "BuiltInPackages",
+                "com.unity.ugui",
+                "Package Resources",
+                "TMP Essential Resources.unitypackage");
+
+            if (File.Exists(package))
+            {
+                AssetDatabase.ImportPackage(package, false);
+                AssetDatabase.Refresh();
+                font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TmpFontPath);
+            }
+
+            if (font == null)
+            {
+                Debug.LogWarning("Flat Iron Fields: TMP Essential Resources were not imported; UI text may not render.");
+            }
+
+            return font;
         }
 
         private static void CreateBootScene()
@@ -257,6 +303,11 @@ namespace FlatIronFields.Game.Editor
             text.fontSize = fontSize;
             text.alignment = TextAlignmentOptions.Center;
             text.rectTransform.sizeDelta = new Vector2(420f, 40f);
+            if (uiFont != null)
+            {
+                text.font = uiFont;
+                text.fontSharedMaterial = uiFont.material;
+            }
             return text;
         }
     }
