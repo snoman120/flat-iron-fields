@@ -47,6 +47,12 @@ namespace FlatIronFields.Game
 
         private void Start()
         {
+            if (SceneManager.GetActiveScene().name == "Boot")
+            {
+                SceneManager.LoadScene("MainMenu");
+                return;
+            }
+
             if (UI != null) { UI.Initialize(State); }
             if (Audio != null) { Audio.Initialize(State); }
             if (Palette != null) { Palette.Initialize(State); }
